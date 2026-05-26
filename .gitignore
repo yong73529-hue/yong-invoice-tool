@@ -1,6 +1,8 @@
 # Sensitive local invoice data
-invoices/
-output/
+invoices/*
+!invoices/.gitkeep
+output/*
+!output/.gitkeep
 
 # Generated packages and historical archives
 *.zip
@@ -22,6 +24,9 @@ script_update_only/
 *.xlsx
 *.xls
 *.csv
+!docs/
+!docs/images/
+!docs/images/*.png
 
 # Python/cache noise
 __pycache__/
