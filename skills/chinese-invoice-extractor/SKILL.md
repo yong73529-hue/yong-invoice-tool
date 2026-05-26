@@ -5,7 +5,7 @@ description: Maintain, extend, and use the Chinese electronic invoice extraction
 
 # Chinese Invoice Extractor
 
-Use this skill for the reimbursement invoice tool in `D:\project2` and for similar Chinese electronic invoice extraction tasks.
+Use this skill for this repository and for similar Chinese electronic invoice extraction tasks.
 
 ## Core Workflow
 

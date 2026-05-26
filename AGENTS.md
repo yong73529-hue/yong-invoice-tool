@@ -60,7 +60,7 @@ py -3 -m extract_invoices
 Force a specific base folder:
 
 ```powershell
-$env:YONG_INVOICE_BASE_DIR = "D:\project2"
+$env:YONG_INVOICE_BASE_DIR = "C:\invoice-tool"
 py -3 -m extract_invoices
 ```
 
@@ -126,4 +126,3 @@ Include only:
 Do not include `invoices/`, `output/`, real invoices, images, Excel files, or old zip files.
 
 If OCR dependencies changed, tell finance to run `install_dependencies.bat` once.
-

@@ -87,7 +87,7 @@ py -3 -m extract_invoices
 如果想固定读取某个目录，可以这样写：
 
 ```powershell
-$env:YONG_INVOICE_BASE_DIR = "D:\project2"
+$env:YONG_INVOICE_BASE_DIR = "C:\invoice-tool"
 py -3 -m extract_invoices
 ```
 
