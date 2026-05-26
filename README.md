@@ -1,56 +1,54 @@
-# Chinese Invoice Extractor
+# 电子发票汇总工具
 
-Batch extract fields from Chinese electronic invoices in PDF or image form and export an Excel summary for reimbursement review.
+这个工具用来批量整理电子发票。把 PDF 或图片发票放进 `invoices` 文件夹，运行后会在 `output` 文件夹生成一份 Excel 汇总表。
 
-## Features
+## 功能
 
-- Extracts invoice number, issue date, invoice type, amounts, item names, seller and buyer details.
-- Supports text-based PDF invoices first for accuracy and speed.
-- Falls back to OCR for image-only PDFs and image files (`jpg`, `png`, `bmp`, `tif`).
-- Splits image-only multipage PDFs into one Excel row per page.
-- Sorts by file entry date and highlights duplicate invoice numbers.
+- 提取发票号码、开票日期、发票类型、金额、税额、价税合计、项目名称、销售方和购买方信息。
+- 优先读取标准电子发票 PDF 里的文字，速度快，准确率也更高。
+- 如果是扫描件或图片发票，会自动尝试 OCR 识别。
+- 支持 PDF、JPG、JPEG、PNG、BMP、TIF、TIFF 文件。
+- 多页图片型 PDF 会按页拆成多条记录。
+- 汇总结果按录入日期排序，重复发票号码会标黄。
 
-## Quick Start
+## 直接使用
 
-1. Install Python 3.11 or newer.
-2. Run `install_dependencies.bat` once.
-3. Put invoice files into an `invoices` folder next to the scripts.
-4. Double-click `run.bat`.
-5. Review `output/invoice_summary.xlsx`.
+1. 安装 Python 3.11 或更新版本。
+2. 第一次使用时双击 `install_dependencies.bat`。
+3. 把发票文件放到 `invoices` 文件夹。
+4. 双击 `run.bat`。
+5. 查看 `output\invoice_summary.xlsx`。
 
-## Install With Pip
+## pip 安装
 
-You can also install the tool directly from GitHub:
+也可以直接从 GitHub 安装：
 
 ```powershell
 py -3 -m pip install git+https://github.com/yong73529-hue/yong-invoice-tool.git
 ```
 
-Then run it in the folder where you want to keep invoice files:
+进入你准备用来放发票的文件夹后运行：
 
 ```powershell
 mkdir invoices
 py -3 -m extract_invoices
 ```
 
-The command reads `invoices` under the current folder and writes `output\invoice_summary.xlsx`.
-If your Python Scripts folder is already in `PATH`, you can also run `yong-invoice-tool`.
+程序会读取当前文件夹下的 `invoices`，并生成 `output\invoice_summary.xlsx`。
 
-To force another working folder, set `YONG_INVOICE_BASE_DIR` before running:
+如果要指定固定目录，可以先设置 `YONG_INVOICE_BASE_DIR`：
 
 ```powershell
 $env:YONG_INVOICE_BASE_DIR = "D:\project2"
 py -3 -m extract_invoices
 ```
 
-## Security Notice
+## 注意
 
-Do not commit real invoices, screenshots, OCR source images, Excel outputs, or generated ZIP packages. The repository `.gitignore` intentionally excludes those files.
+- 不要把真实发票、截图、图片、Excel 输出或压缩包提交到 GitHub。
+- OCR 识别的结果会在备注里标记“OCR识别，请人工复核”，报销前建议人工看一遍。
+- 如果遇到新的发票样式识别不准，通常需要在 `extract_invoices.py` 里补一条解析规则。
 
-OCR rows are marked with `OCR识别，请人工复核` and should be reviewed manually before reimbursement decisions.
+## 给维护者
 
-## Notes
-
-The parsing rules are mostly in `extract_invoices.py`. If a new invoice layout fails, check the extracted text first, then add a small rule for that layout.
-
-For agent-assisted maintenance, see `AGENTS.md`.
+`AGENTS.md` 里写了排查步骤、字段顺序和提交前检查项，后面维护时可以先看那份文件。
