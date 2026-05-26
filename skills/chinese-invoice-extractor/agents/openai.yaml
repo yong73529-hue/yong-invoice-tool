@@ -1,0 +1,4 @@
+interface:
+  display_name: "Chinese Invoice Extractor"
+  short_description: "Maintain and use the Chinese e-invoice extraction workflow."
+  default_prompt: "Use this skill to extract Chinese electronic invoice data from PDFs and images, update parsing/OCR rules, generate Excel summaries, and package update files for finance users."

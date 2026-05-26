@@ -1,0 +1,33 @@
+# Sensitive local invoice data
+invoices/
+output/
+
+# Generated packages and historical archives
+*.zip
+invoice_tool_for_finance/
+invoice_tool_for_finance_latest/
+ocr_update_files_only/
+package_test_extract/
+package_test_extract_latest/
+script_update_only/
+
+# Invoice/source artifacts that should never be committed
+*.pdf
+*.jpg
+*.jpeg
+*.png
+*.bmp
+*.tif
+*.tiff
+*.xlsx
+*.xls
+*.csv
+
+# Python/cache noise
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
