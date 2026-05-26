@@ -49,29 +49,8 @@ Do not commit real invoices, screenshots, OCR source images, Excel outputs, or g
 
 OCR rows are marked with `OCR识别，请人工复核` and should be reviewed manually before reimbursement decisions.
 
-## Codex Skill
+## Notes
 
-This repository includes `skills/chinese-invoice-extractor`, a Codex skill that documents the maintenance workflow, known invoice layout patterns, and update packaging rules.
+The parsing rules are mostly in `extract_invoices.py`. If a new invoice layout fails, check the extracted text first, then add a small rule for that layout.
 
-To use the skill in another Codex environment, copy the folder:
-
-```text
-skills/chinese-invoice-extractor
-```
-
-into:
-
-```text
-C:\Users\<你的用户名>\.codex\skills\chinese-invoice-extractor
-```
-
-After restarting Codex, ask Codex to use `chinese-invoice-extractor` for invoice extraction or troubleshooting tasks. The skill teaches Codex how to maintain and extend the workflow; it is separate from the `pip` command-line installer.
-
-## Other Agents
-
-Other coding agents do not need the Codex skill system. They can use this repository in two ways:
-
-- Run the Python tool with `py -3 -m extract_invoices` after installing from GitHub with pip.
-- Read `AGENTS.md` for the maintenance workflow, parsing rules, test commands, and data-safety rules.
-
-Claude Code can also read `CLAUDE.md`, which points it to the same shared agent instructions.
+For agent-assisted maintenance, see `AGENTS.md`.
