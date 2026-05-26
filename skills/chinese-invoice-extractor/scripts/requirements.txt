@@ -4,3 +4,4 @@ openpyxl
 rapidocr_onnxruntime
 pypdfium2
 Pillow
+numpy

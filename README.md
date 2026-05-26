@@ -18,6 +18,31 @@ Batch extract fields from Chinese electronic invoices in PDF or image form and e
 4. Double-click `run.bat`.
 5. Review `output/invoice_summary.xlsx`.
 
+## Install With Pip
+
+You can also install the tool directly from GitHub:
+
+```powershell
+py -3 -m pip install git+https://github.com/yong73529-hue/yong-invoice-tool.git
+```
+
+Then run it in the folder where you want to keep invoice files:
+
+```powershell
+mkdir invoices
+py -3 -m extract_invoices
+```
+
+The command reads `invoices` under the current folder and writes `output\invoice_summary.xlsx`.
+If your Python Scripts folder is already in `PATH`, you can also run `yong-invoice-tool`.
+
+To force another working folder, set `YONG_INVOICE_BASE_DIR` before running:
+
+```powershell
+$env:YONG_INVOICE_BASE_DIR = "D:\project2"
+py -3 -m extract_invoices
+```
+
 ## Security Notice
 
 Do not commit real invoices, screenshots, OCR source images, Excel outputs, or generated ZIP packages. The repository `.gitignore` intentionally excludes those files.
@@ -27,3 +52,17 @@ OCR rows are marked with `OCR识别，请人工复核` and should be reviewed ma
 ## Codex Skill
 
 This repository includes `skills/chinese-invoice-extractor`, a Codex skill that documents the maintenance workflow, known invoice layout patterns, and update packaging rules.
+
+To use the skill in another Codex environment, copy the folder:
+
+```text
+skills/chinese-invoice-extractor
+```
+
+into:
+
+```text
+C:\Users\<你的用户名>\.codex\skills\chinese-invoice-extractor
+```
+
+After restarting Codex, ask Codex to use `chinese-invoice-extractor` for invoice extraction or troubleshooting tasks. The skill teaches Codex how to maintain and extend the workflow; it is separate from the `pip` command-line installer.

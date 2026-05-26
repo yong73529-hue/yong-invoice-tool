@@ -27,6 +27,9 @@ script_update_only/
 __pycache__/
 *.py[cod]
 .pytest_cache/
+*.egg-info/
+build/
+dist/
 
 # OS/editor noise
 .DS_Store

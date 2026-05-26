@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "yong-invoice-tool"
+version = "0.1.0"
+description = "Batch extract Chinese invoice fields from PDF and image files into Excel."
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [
+    { name = "yong73529-hue" }
+]
+dependencies = [
+    "pdfplumber",
+    "pandas",
+    "openpyxl",
+    "rapidocr_onnxruntime",
+    "pypdfium2",
+    "Pillow",
+    "numpy",
+]
+
+[project.scripts]
+yong-invoice-tool = "extract_invoices:main"
+
+[tool.setuptools]
+py-modules = ["extract_invoices"]

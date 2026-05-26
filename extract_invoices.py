@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import re
+import os
 import sys
 from collections import Counter
 from datetime import datetime
@@ -20,7 +21,15 @@ except ImportError:
     RapidOCR = None
 
 
-BASE_DIR = Path(__file__).resolve().parent
+def resolve_base_dir() -> Path:
+    env_base_dir = os.environ.get("YONG_INVOICE_BASE_DIR")
+    if env_base_dir:
+        return Path(env_base_dir).expanduser().resolve()
+
+    return Path.cwd().resolve()
+
+
+BASE_DIR = resolve_base_dir()
 INPUT_DIR = BASE_DIR / "invoices"
 OUTPUT_DIR = BASE_DIR / "output"
 OUTPUT_FILE = OUTPUT_DIR / "invoice_summary.xlsx"
