@@ -17,8 +17,10 @@ from openpyxl.styles import PatternFill
 
 try:
     from rapidocr_onnxruntime import RapidOCR
-except ImportError:
+    RAPIDOCR_IMPORT_ERROR = ""
+except Exception as exc:
     RapidOCR = None
+    RAPIDOCR_IMPORT_ERROR = str(exc)
 
 
 def resolve_base_dir() -> Path:
@@ -119,7 +121,8 @@ def read_image_ocr_text(image_path: Path) -> str:
 def get_ocr_engine():
     global OCR_ENGINE
     if RapidOCR is None:
-        raise RuntimeError("缺少OCR依赖，请先运行 install_dependencies.bat 安装 rapidocr_onnxruntime")
+        detail = f"；导入错误：{RAPIDOCR_IMPORT_ERROR}" if RAPIDOCR_IMPORT_ERROR else ""
+        raise RuntimeError(f"缺少OCR依赖，请先运行 install_ocr_dependencies.bat，装完后关闭Excel并重新运行 run.bat{detail}")
     if OCR_ENGINE is None:
         OCR_ENGINE = RapidOCR()
     return OCR_ENGINE

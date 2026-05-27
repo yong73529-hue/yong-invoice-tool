@@ -34,10 +34,10 @@ echo Python command: %PY_CMD% >> "%LOG_FILE%"
 %PY_CMD% --version >> "%LOG_FILE%" 2>&1
 
 %PY_CMD% -m pip install --upgrade pip >> "%LOG_FILE%" 2>&1
-%PY_CMD% -m pip install rapidocr_onnxruntime pypdfium2 Pillow numpy >> "%LOG_FILE%" 2>&1
+%PY_CMD% -m pip install --upgrade --force-reinstall rapidocr_onnxruntime pypdfium2 Pillow numpy >> "%LOG_FILE%" 2>&1
 set INSTALL_EXIT=%ERRORLEVEL%
 
-%PY_CMD% -c "import rapidocr_onnxruntime, pypdfium2, PIL, numpy; print('OCR dependencies are ready.')" >> "%LOG_FILE%" 2>&1
+%PY_CMD% -c "from rapidocr_onnxruntime import RapidOCR; import pypdfium2; from PIL import Image; import numpy; print('OCR dependencies are ready.')" >> "%LOG_FILE%" 2>&1
 if errorlevel 1 set INSTALL_EXIT=1
 
 type "%LOG_FILE%"

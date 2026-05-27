@@ -33,10 +33,10 @@ if "%PY_CMD%"=="" (
 echo Python command: %PY_CMD% >> "%LOG_FILE%"
 %PY_CMD% --version >> "%LOG_FILE%" 2>&1
 
-%PY_CMD% -c "import importlib.util, sys; mods=['pdfplumber','pandas','openpyxl','rapidocr_onnxruntime','pypdfium2','PIL','numpy']; missing=[m for m in mods if importlib.util.find_spec(m) is None]; print('Missing dependencies: ' + (', '.join(missing) if missing else 'none')); sys.exit(1 if missing else 0)" >> "%LOG_FILE%" 2>&1
+%PY_CMD% -c "import pdfplumber, pandas, openpyxl, pypdfium2, numpy; from PIL import Image; from rapidocr_onnxruntime import RapidOCR; print('Dependency import check: OK')" >> "%LOG_FILE%" 2>&1
 if errorlevel 1 (
     echo Missing dependencies. Please run this file first:
-    echo install_dependencies.bat
+    echo install_ocr_dependencies.bat
     echo.
     echo Details were saved to run_log.txt.
     echo Please send run_log.txt back if it still cannot run.

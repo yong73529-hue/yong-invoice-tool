@@ -18,6 +18,8 @@
 
 如果 Excel 备注里出现“缺少OCR依赖”，请双击 `install_ocr_dependencies.bat`，装完后再双击 `run.bat`。
 
+如果已经装完依赖但 Excel 里还是旧提示，请先关闭 Excel，删除 `output\invoice_summary.xlsx`，再双击 `run.bat` 重新生成。
+
 ## 汇总字段
 
 表格会包含：
