@@ -16,6 +16,8 @@
 如果双击后没有正常生成表格，请把工具文件夹里的 `run_log.txt` 发回来。  
 如果安装依赖失败，请把 `install_log.txt` 发回来。
 
+如果 Excel 备注里出现“缺少OCR依赖”，请双击 `install_ocr_dependencies.bat`，装完后再双击 `run.bat`。
+
 ## 汇总字段
 
 表格会包含：
