@@ -45,6 +45,7 @@ type "%LOG_FILE%"
 if not "%INSTALL_EXIT%"=="0" (
     echo.
     echo OCR dependency installation failed. Details were saved to install_ocr_log.txt.
+    echo If the log mentions onnxruntime_pybind11_state or DLL load failed, run install_windows_runtime.bat first.
     echo Please send install_ocr_log.txt back for checking.
     echo.
     pause

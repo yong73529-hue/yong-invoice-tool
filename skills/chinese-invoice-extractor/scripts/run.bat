@@ -37,6 +37,7 @@ echo Python command: %PY_CMD% >> "%LOG_FILE%"
 if errorlevel 1 (
     echo Missing dependencies. Please run this file first:
     echo install_ocr_dependencies.bat
+    echo If it reports DLL load failed, run install_windows_runtime.bat first.
     echo.
     echo Details were saved to run_log.txt.
     echo Please send run_log.txt back if it still cannot run.

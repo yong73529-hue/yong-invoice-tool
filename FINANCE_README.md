@@ -18,6 +18,8 @@
 
 如果 Excel 备注里出现“缺少OCR依赖”，请双击 `install_ocr_dependencies.bat`，装完后再双击 `run.bat`。
 
+如果安装 OCR 依赖时出现 `DLL load failed` 或 `onnxruntime_pybind11_state`，请先双击 `install_windows_runtime.bat`，安装完成后再双击 `install_ocr_dependencies.bat`。
+
 如果已经装完依赖但 Excel 里还是旧提示，请先关闭 Excel，再双击 `run.bat` 重新生成。程序会自动保留旧表里的录入日期。
 
 ## 汇总字段

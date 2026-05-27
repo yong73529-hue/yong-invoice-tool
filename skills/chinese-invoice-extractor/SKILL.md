@@ -13,7 +13,7 @@ Use this skill for this repository and for similar Chinese electronic invoice ex
    - Main tool: `extract_invoices.py`
    - Input folder: `invoices`
    - Output folder: `output`
-   - Entry scripts: `run.bat`, `install_dependencies.bat`, `install_ocr_dependencies.bat`
+   - Entry scripts: `run.bat`, `install_dependencies.bat`, `install_ocr_dependencies.bat`, `install_windows_runtime.bat`
    - Dependencies: `requirements.txt`
 2. For new failing samples, first print extracted text/OCR text and parse result for the specific file.
 3. Patch the smallest parsing rule that covers the observed layout.
@@ -73,6 +73,7 @@ Prefer update-only packages to avoid changing `录入日期`:
 - Tell finance to copy/overwrite program files only and not move invoice PDFs.
 - If OCR dependencies changed, tell finance to run `install_dependencies.bat` once.
 - If only OCR dependencies are missing, tell finance to run `install_ocr_dependencies.bat`.
+- If OCR installation reports `onnxruntime_pybind11_state` or `DLL load failed`, tell finance to run `install_windows_runtime.bat`, then run `install_ocr_dependencies.bat` again.
 
 Use names like:
 
@@ -84,5 +85,5 @@ Create full packages only when the user asks for a clean handoff package.
 
 - `scripts/extract_invoices.py`: current production script template.
 - `scripts/requirements.txt`: dependency list.
-- `scripts/run.bat`, `scripts/install_dependencies.bat`, and `scripts/install_ocr_dependencies.bat`: Windows entrypoints.
+- `scripts/run.bat`, `scripts/install_dependencies.bat`, `scripts/install_ocr_dependencies.bat`, and `scripts/install_windows_runtime.bat`: Windows entrypoints.
 - `references/layout-notes.md`: known invoice layout patterns and fixes.
