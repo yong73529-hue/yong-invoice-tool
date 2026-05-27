@@ -1,7 +1,8 @@
 电子发票PDF汇总工具 OCR依赖检测修复版
 打包时间：20260527
 更新内容：
-1. run.bat 改为真正导入 RapidOCR 检测，避免“依赖显示不缺但 OCR 仍失败”。
-2. install_ocr_dependencies.bat 改为强制重装 OCR 相关依赖，并验证 RapidOCR 能导入。
-3. OCR 报错会提示关闭 Excel、重新运行 run.bat，并保留具体导入错误。
-4. 保留 OCR 图片识别、多页图片 PDF 拆分、重复发票标黄等功能。
+1. 重新运行时自动读取旧的 invoice_summary.xlsx，保留原来的录入日期。
+2. run.bat 改为真正导入 RapidOCR 检测，避免“依赖显示不缺但 OCR 仍失败”。
+3. install_ocr_dependencies.bat 改为强制重装 OCR 相关依赖，并验证 RapidOCR 能导入。
+4. OCR 报错会提示关闭 Excel、重新运行 run.bat，并保留具体导入错误。
+5. 保留 OCR 图片识别、多页图片 PDF 拆分、重复发票标黄等功能。

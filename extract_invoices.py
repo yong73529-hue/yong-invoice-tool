@@ -720,6 +720,43 @@ def parse_invoice_rows(file_path: Path) -> list[dict[str, str]]:
     return [parse_invoice(file_path)]
 
 
+def read_existing_entry_dates() -> dict[str, str]:
+    if not OUTPUT_FILE.exists():
+        return {}
+
+    try:
+        old_df = pd.read_excel(OUTPUT_FILE, sheet_name="发票汇总", dtype=str).fillna("")
+    except Exception as exc:
+        print(f"未能读取旧汇总表，录入日期将按文件日期填写：{exc}")
+        return {}
+
+    if "文件名" not in old_df.columns or "录入日期" not in old_df.columns:
+        return {}
+
+    entry_dates: dict[str, str] = {}
+    for _, old_row in old_df.iterrows():
+        filename = str(old_row.get("文件名", "")).strip()
+        entry_date = str(old_row.get("录入日期", "")).strip()
+        if filename and entry_date and filename not in entry_dates:
+            entry_dates[filename] = entry_date
+    return entry_dates
+
+
+def preserve_existing_entry_dates(rows: list[dict[str, str]], entry_dates: dict[str, str]) -> None:
+    if not entry_dates:
+        return
+
+    kept_count = 0
+    for row in rows:
+        old_entry_date = entry_dates.get(row.get("文件名", ""))
+        if old_entry_date:
+            row["录入日期"] = old_entry_date
+            kept_count += 1
+
+    if kept_count:
+        print(f"已保留旧汇总表中的录入日期：{kept_count} 条")
+
+
 def mark_duplicate_invoice_numbers(rows: list[dict[str, str]]) -> None:
     counts = Counter(row["发票号码"] for row in rows if row.get("发票号码"))
     for row in rows:
@@ -792,11 +829,13 @@ def main() -> int:
         print("没有找到可处理文件。请把电子发票PDF或图片放入 invoices 文件夹后再运行。")
         return 0
 
+    existing_entry_dates = read_existing_entry_dates()
     rows = []
     for pdf_path in pdf_files:
         print(f"正在处理：{pdf_path.name}")
         rows.extend(parse_invoice_rows(pdf_path))
 
+    preserve_existing_entry_dates(rows, existing_entry_dates)
     mark_duplicate_invoice_numbers(rows)
     write_excel(rows)
 
