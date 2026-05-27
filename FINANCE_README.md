@@ -9,9 +9,12 @@
 
 ## 日常使用
 
-1. 把电子发票 PDF 放入 `invoices` 文件夹。
+1. 把电子发票 PDF、图片或图片型 PDF 放入 `invoices` 文件夹。
 2. 双击 `run.bat`。
 3. 查看 `output\invoice_summary.xlsx`。
+
+如果双击后没有正常生成表格，请把工具文件夹里的 `run_log.txt` 发回来。  
+如果安装依赖失败，请把 `install_log.txt` 发回来。
 
 ## 汇总字段
 
