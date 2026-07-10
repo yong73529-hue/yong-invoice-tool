@@ -538,6 +538,7 @@ def is_valid_party_name(value: str) -> bool:
             "服务部",
             "食铺",
             "饭店",
+            "餐馆",
             "餐饮",
             "小吃",
             "超市",
@@ -560,7 +561,7 @@ def extract_split_party_names_from_lines(text: str) -> list[str]:
         return []
 
     line = lines[tax_line_index - 1]
-    company_pattern = r".+?(?:有限公司|分公司|个体工商户|中心|商行|门市部|工作室|经营部|制作部|服务部|食铺|饭店|餐饮店|小吃店|超市|花店|店)"
+    company_pattern = r".+?(?:有限公司|分公司|个体工商户|中心|商行|门市部|工作室|经营部|制作部|服务部|食铺|饭店|餐馆|餐饮店|小吃店|超市|花店|店)"
     match = re.match(rf"({company_pattern})\s+({company_pattern}.*)", line)
     if match:
         return [clean_party_info_line(match.group(1)), clean_party_info_line(match.group(2))]
