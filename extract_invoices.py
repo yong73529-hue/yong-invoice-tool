@@ -159,6 +159,9 @@ def first_match(patterns: list[str], text: str) -> str:
 
 
 def extract_invoice_type(text: str, compact: str) -> str:
+    if "铁路电子客票" in compact or ("铁路" in compact and "电子客票" in compact):
+        return "铁路电子客票"
+
     value = first_match(
         [
             r"电子发票[（(]\s*([^）)\n]+?)\s*[）)]",
@@ -424,13 +427,14 @@ def parse_party_info(info: str) -> tuple[str, str]:
 
     name = first_match(
         [
-            r"名\s*称\s*[：:]\s*([^；;]+)",
+            r"名\s*称\s*[：:]\s*(.*?)(?=\s*(?:统一社会信用代码|统一社会信息代码|统一社会信用代码/纳税人识别号|统一社会信息代码/纳税人识别号|纳税人识别号)[：:]|[；;\n]|$)",
         ],
         info,
     )
     tax_id = first_match(
         [
             r"(?:统一社会信用代码/纳税人识别号|统一社会信息代码/纳税人识别号|纳税人识别号)\s*[：:]\s*([A-Z0-9]+)",
+            r"(?:统一社会信用代码|统一社会信息代码)\s*[：:]\s*([A-Z0-9]+)",
         ],
         info,
     )
@@ -576,6 +580,10 @@ def clean_party_info_line(value: str) -> str:
 
 
 def extract_item_name(text: str) -> str:
+    compact = compact_text(text)
+    if "铁路电子客票" in compact or ("铁路" in compact and "电子客票" in compact):
+        return "铁路旅客运输服务"
+
     starred_items = re.findall(r"\*[^*\s\n]+\*[^\s\n]+", text)
     if starred_items:
         return "；".join(dict.fromkeys(starred_items))
@@ -608,6 +616,32 @@ def extract_item_name(text: str) -> str:
         text,
     )
     return value.strip()
+
+
+def fill_railway_ticket_fields(row: dict[str, str], text: str, compact: str) -> None:
+    if "铁路电子客票" not in compact and not ("铁路" in compact and "电子客票" in compact):
+        return
+
+    row["发票类型"] = "铁路电子客票"
+    if not row["项目名称"]:
+        row["项目名称"] = "铁路旅客运输服务"
+    if not row["销售方名称"]:
+        row["销售方名称"] = "中国国家铁路集团有限公司"
+    if not row["销售方纳税人识别号"]:
+        row["销售方纳税人识别号"] = "91100000000013477B"
+
+    buyer_match = re.search(
+        r"购买方名称\s*[：:]\s*(.*?)\s*统一社会信用代码\s*[：:]\s*([A-Z0-9]+)",
+        text,
+    )
+    if not buyer_match:
+        buyer_match = re.search(
+            r"购买方名称[:：]?(.*?)统一社会信用代码[:：]?([A-Z0-9]+)",
+            compact,
+        )
+    if buyer_match:
+        row["购买方名称"] = clean_party_info_line(buyer_match.group(1))
+        row["购买方纳税人识别号"] = buyer_match.group(2)
 
 
 def parse_invoice(pdf_path: Path) -> dict[str, str]:
@@ -648,6 +682,7 @@ def parse_invoice_text(row: dict[str, str], text: str, used_ocr: bool) -> dict[s
     row["项目名称"] = extract_item_name(text)
     row["销售方名称"], row["销售方纳税人识别号"] = extract_party_fields(text, compact, "销售方")
     row["购买方名称"], row["购买方纳税人识别号"] = extract_party_fields(text, compact, "购买方")
+    fill_railway_ticket_fields(row, text, compact)
 
     missing = [
         column
