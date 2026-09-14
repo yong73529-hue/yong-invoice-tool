@@ -60,6 +60,7 @@ COLUMNS = [
 
 def normalize_text(text: str) -> str:
     text = text.replace("\u3000", " ")
+    text = text.translate(str.maketrans({"⽉": "月", "⽇": "日", "⻓": "长"}))
     text = re.sub(r"[ \t]+", " ", text)
     text = re.sub(r"\n{2,}", "\n", text)
     return text.strip()
@@ -552,8 +553,13 @@ def is_valid_party_name(value: str) -> bool:
             "旅馆",
             "超市",
             "花店",
+            "花艺",
+            "花艺坊",
             "贸易",
             "科技",
+            "传媒行",
+            "个体工商户",
+            "行",
         ]
     )
 
@@ -570,7 +576,7 @@ def extract_split_party_names_from_lines(text: str) -> list[str]:
         return []
 
     line = lines[tax_line_index - 1]
-    company_pattern = r".+?(?:有限公司|分公司|个体工商户|中心|商行|门市部|工作室|经营部|制作部|服务部|食铺|饭店|餐馆|餐饮店|小吃店|客栈坊|客栈|宾馆|酒店|旅馆|超市|花店|店)"
+    company_pattern = r".+?(?:有限公司|分公司|个体工商户|中心|商行|传媒行|门市部|工作室|经营部|制作部|服务部|食铺|饭店|餐馆|餐饮店|小吃店|客栈坊|客栈|宾馆|酒店|旅馆|超市|花艺坊|花店|行|店)"
     match = re.match(rf"({company_pattern})\s+({company_pattern}.*)", line)
     if match:
         return [clean_party_info_line(match.group(1)), clean_party_info_line(match.group(2))]
@@ -589,11 +595,26 @@ def extract_item_name(text: str) -> str:
     if "铁路电子客票" in compact or ("铁路" in compact and "电子客票" in compact):
         return "铁路旅客运输服务"
 
-    starred_items = re.findall(r"\*[^*\s\n]+\*[^\s\n]+", text)
+    lines = [line.strip() for line in text.splitlines() if line.strip()]
+    starred_items: list[str] = []
+    for index, line in enumerate(lines):
+        match = re.search(r"\*[^*\s\n]+\*[^\s\n]+", line)
+        if not match:
+            continue
+        item = match.group(0)
+        for next_line in lines[index + 1 : index + 3]:
+            next_clean = next_line.strip()
+            if any(marker in next_clean for marker in ["合计", "价税合计", "销售方", "购买方", "备注"]):
+                break
+            if re.search(r"[¥￥]|\d+\.\d{1,}", next_clean) or re.fullmatch(r"[0-9,.\s*%税率征收额]+", next_clean):
+                break
+            continuation = next_clean.split()[0].strip()
+            if continuation and not continuation.startswith("*"):
+                item += continuation
+        starred_items.append(item)
     if starred_items:
         return "；".join(dict.fromkeys(starred_items))
 
-    lines = [line.strip() for line in text.splitlines() if line.strip()]
     header_index = -1
     for index, line in enumerate(lines):
         if ("货物" in line and ("劳务" in line or "服务" in line) and "名称" in line) or "项目名称" in line:
